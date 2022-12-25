@@ -4,7 +4,6 @@ import com.example.testGroup.domain.Order;
 import com.example.testGroup.dto.OrderDTO;
 import com.example.testGroup.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,29 +18,24 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
-
-        List<Order> orders = orderService.getOrders();
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+    public List<OrderDTO> getAllOrders() {
+        return orderService.getOrders();
     }
 
     @GetMapping({"/{orderId}"})
-    public ResponseEntity<Order> getOrder(@PathVariable Long orderId) {
-        return new ResponseEntity<>(orderService.getOrderById(orderId), HttpStatus.OK);
+    public OrderDTO getOrder(@PathVariable Long orderId) {
+        return orderService.getOrderById(orderId);
     }
 
     @PostMapping
-    public ResponseEntity<Order> saveOrder(@RequestBody OrderDTO orderDTO) {
-        Order order1 = orderService.insert(orderDTO);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("order", "/api/v1/order/" + order1.getId().toString());
-        return new ResponseEntity<>(order1, httpHeaders, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderDTO saveOrder(@RequestBody OrderDTO orderDTO) {
+        return orderService.insert(orderDTO);
     }
 
     @PutMapping({"/{orderId}"})
-    public ResponseEntity<Order> updateOrder(@PathVariable("orderId") Long orderId, @RequestBody Order order) {
-        orderService.updateOrder(orderId, order);
-        return new ResponseEntity<>(orderService.getOrderById(orderId), HttpStatus.OK);
+    public OrderDTO updateOrder(@PathVariable("orderId") Long orderId, @RequestBody OrderDTO orderDTO) {
+       return orderService.updateOrder(orderId, orderDTO);
     }
 
     @DeleteMapping({"/{deleteId}"})

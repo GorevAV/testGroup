@@ -3,33 +3,36 @@ package com.example.testGroup.service;
 import com.example.testGroup.domain.Employee;
 import com.example.testGroup.domain.Order;
 import com.example.testGroup.dto.OrderDTO;
+import com.example.testGroup.mapping.OrderMapper;
 import com.example.testGroup.repo.EmployeeRepo;
 import com.example.testGroup.repo.OrderRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class OrderService {
 
+    private final OrderMapper orderMapper;
     private final OrderRepo orderRepo;
     private final EmployeeRepo employeeRepo;
 
-    public OrderService(OrderRepo orderRepo, EmployeeRepo employeeRepo) {
+    public OrderService(OrderMapper orderMapper, OrderRepo orderRepo, EmployeeRepo employeeRepo) {
+        this.orderMapper = orderMapper;
         this.orderRepo = orderRepo;
         this.employeeRepo = employeeRepo;
     }
 
-    public List<Order> getOrders() {
-        return orderRepo.findAll();
+    public List<OrderDTO> getOrders() {
+        return orderMapper.asDTOs(orderRepo.findAll());
     }
 
-    public Order getOrderById(Long id) {
-        return orderRepo.findById(id).get();
+    public OrderDTO getOrderById(Long id) {
+        return orderMapper.asDTO(orderRepo.findById(id).orElseThrow());
     }
 
-    public Order insert(OrderDTO orderDTO) {
+    public OrderDTO insert(OrderDTO orderDTO) {
         Employee employee = employeeRepo.getReferenceById(orderDTO.getEmployeeId());
         Order order = new Order();
         order.setName(orderDTO.getName());
@@ -37,16 +40,17 @@ public class OrderService {
         order.setDateCompletion(orderDTO.getDateCompletion());
         order.setTypeFurniture(orderDTO.getTypeFurniture());
         order.setEmployee(employee);
-        return orderRepo.save(order);
+        return orderMapper.asDTO(orderRepo.save(order));
     }
 
-    public void updateOrder(Long orderId, Order order) {
-        Order updateOrder = orderRepo.findById(orderId).get();
+    @Transactional
+    public OrderDTO updateOrder(Long orderId, OrderDTO order) {
+        Order updateOrder = orderRepo.findById(orderId).orElseThrow();
         updateOrder.setName(order.getName());
         updateOrder.setDateCompletion(order.getDateCompletion());
         updateOrder.setTypeFurniture(order.getTypeFurniture());
         updateOrder.setStatus(order.isStatus());
-        orderRepo.save(updateOrder);
+        return orderMapper.asDTO(orderRepo.save(updateOrder));
     }
 
     public void deleteOrder(Long orderId) {

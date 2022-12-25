@@ -4,7 +4,6 @@ import com.example.testGroup.domain.Employee;
 import com.example.testGroup.domain.Order;
 import com.example.testGroup.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,29 +18,24 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-
-        List<Employee> employees = employeeService.getEmployees();
-        return new ResponseEntity<>(employees, HttpStatus.OK);
+    public List<Employee> getAllEmployees() {
+        return employeeService.getEmployees();
     }
 
     @GetMapping({"/{employeeId}"})
-    public ResponseEntity<Employee> getEmployee(@PathVariable Long employeeId) {
-        return new ResponseEntity<>(employeeService.getEmployeeById(employeeId), HttpStatus.OK);
+    public Employee getEmployee(@PathVariable Long employeeId) {
+        return employeeService.getEmployeeById(employeeId);
     }
 
     @PostMapping
-    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
-        Employee employee1 = employeeService.insert(employee);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("employee", "/api/v1/employee/" + employee1.getId().toString());
-        return new ResponseEntity<>(employee1, httpHeaders, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Employee saveEmployee(@RequestBody Employee employee) {
+        return employeeService.insert(employee);
     }
 
     @PutMapping({"/{employeeId}"})
-    public ResponseEntity<Employee> updateEmployee(@PathVariable("employeeId") Long employeeId, @RequestBody Employee employee) {
+    public void updateEmployee(@PathVariable("employeeId") Long employeeId, @RequestBody Employee employee) {
         employeeService.updateEmployee(employeeId, employee);
-        return new ResponseEntity<>(employeeService.getEmployeeById(employeeId), HttpStatus.OK);
     }
 
     @DeleteMapping({"/{deleteId}"})
