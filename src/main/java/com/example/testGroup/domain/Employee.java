@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "employee")
@@ -17,11 +18,12 @@ public class Employee {
 
     private String lastName;
 
-    private String department;
+    @Enumerated(EnumType.STRING)
+    private FurnitureType department;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Order> orders;
+    private Set<Order> orders;
 
     public Employee() {
             }
@@ -50,21 +52,19 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public String getDepartment() {
+    public FurnitureType getDepartment() {
         return department;
     }
 
-    public void setDepartment(String department) {
+    public void setDepartment(FurnitureType department) {
         this.department = department;
     }
 
-    public List<Order> getOrders() {
+    public Set<Order> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<Order> orders) {
+    public void setOrders(Set<Order> orders) {
         this.orders = orders;
     }
-
-
 }

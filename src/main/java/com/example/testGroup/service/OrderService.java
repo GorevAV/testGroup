@@ -1,6 +1,7 @@
 package com.example.testGroup.service;
 
 import com.example.testGroup.domain.Employee;
+import com.example.testGroup.domain.FurnitureType;
 import com.example.testGroup.domain.Order;
 import com.example.testGroup.dto.OrderDTO;
 import com.example.testGroup.mapping.OrderMapper;
@@ -33,7 +34,7 @@ public class OrderService {
     }
 
     public OrderDTO insert(OrderDTO orderDTO) {
-        Employee employee = employeeRepo.getReferenceById(orderDTO.getEmployeeId());
+        Employee employee = employeeRepo.getReferenceById(autoAssignment(orderDTO));
         Order order = new Order();
         order.setName(orderDTO.getName());
         order.setStatus(false);
@@ -52,8 +53,24 @@ public class OrderService {
         updateOrder.setStatus(order.isStatus());
         return orderMapper.asDTO(orderRepo.save(updateOrder));
     }
+    @Transactional
+    public OrderDTO updateEmployeeOrder(Long orderId, OrderDTO orderDTO) {
+        Order updateOrder = orderRepo.findById(orderId).orElseThrow();
+        Employee employee = employeeRepo.getReferenceById(autoAssignment(orderDTO));
+        updateOrder.setEmployee(employee);
+        return orderMapper.asDTO(orderRepo.save(updateOrder));
+    }
+
 
     public void deleteOrder(Long orderId) {
         orderRepo.deleteById(orderId);
     }
+
+    public Long autoAssignment(OrderDTO orderDTO) {
+        List<Employee> employees = employeeRepo.findByDepartment(orderDTO.getTypeFurniture());
+        Employee employee = employees.get((int) (Math.random() * employees.size()));
+        return employee.getId();
+    }
 }
+
+

@@ -20,5 +20,5 @@ create table ordr
     primary key (id)
 );
 
-alter table if exists ordr add constraint employee_order_fk foreign key (employee_id) references employee;
+alter table if exists ordr add constraint employee_order_fk foreign key (employee_id) references employee on delete set null;
 

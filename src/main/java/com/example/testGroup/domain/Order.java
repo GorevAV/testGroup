@@ -1,7 +1,6 @@
 package com.example.testGroup.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -20,7 +19,6 @@ public class Order {
     private FurnitureType typeFurniture;
 
     @Column(columnDefinition = "TIMESTAMP")
-
     private LocalDateTime dateCompletion;
 
     private boolean status;

@@ -1,11 +1,9 @@
 package com.example.testGroup.controllers;
 
 import com.example.testGroup.domain.Employee;
-import com.example.testGroup.domain.Order;
 import com.example.testGroup.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,9 +37,9 @@ public class EmployeeController {
     }
 
     @DeleteMapping({"/{deleteId}"})
-    public ResponseEntity<Order> deleteEmployee(@PathVariable("employeeId") Long employeeId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable("deleteId") Long employeeId) {
         employeeService.deleteEmployee(employeeId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
