@@ -7,10 +7,16 @@ import com.example.testGroup.dto.OrderDTO;
 import com.example.testGroup.mapping.OrderMapper;
 import com.example.testGroup.repo.EmployeeRepo;
 import com.example.testGroup.repo.OrderRepo;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -53,12 +59,13 @@ public class OrderService {
         updateOrder.setStatus(order.isStatus());
         return orderMapper.asDTO(orderRepo.save(updateOrder));
     }
+
     @Transactional
-    public OrderDTO updateEmployeeOrder(Long orderId, OrderDTO orderDTO) {
+    public void updateEmployeeOrder(Long orderId, OrderDTO orderDTO) {
         Order updateOrder = orderRepo.findById(orderId).orElseThrow();
         Employee employee = employeeRepo.getReferenceById(autoAssignment(orderDTO));
         updateOrder.setEmployee(employee);
-        return orderMapper.asDTO(orderRepo.save(updateOrder));
+        orderMapper.asDTO(orderRepo.save(updateOrder));
     }
 
 
@@ -70,6 +77,29 @@ public class OrderService {
         List<Employee> employees = employeeRepo.findByDepartment(orderDTO.getTypeFurniture());
         Employee employee = employees.get((int) (Math.random() * employees.size()));
         return employee.getId();
+    }
+
+    public String timeComplete(LocalDateTime dateCompletion) {
+        LocalDateTime today = LocalDateTime.now();
+        return "days - " + ChronoUnit.DAYS.between(today, dateCompletion)
+                + ", hours - " + ChronoUnit.HOURS.between(today.toLocalTime(),dateCompletion.toLocalTime());
+    }
+
+    public List<OrderDTO> getOrdersNotComplete() {
+        return orderMapper.asDTOs(orderRepo.findByStatus(false));
+    }
+
+    public List<OrderDTO> getOrdersDepartment(FurnitureType department) {
+        return orderMapper.asDTOs(orderRepo.findByDepartment(department));
+    }
+
+    public List<OrderDTO> getOrdersEmployee(String firstName, String lastName) {
+        return orderMapper.asDTOs(orderRepo.findByEmployee(firstName, lastName));
+    }
+
+    public String getOrderTime(Long orderId) {
+        Optional<Order> order = orderRepo.findById(orderId);
+        return timeComplete(order.get().getDateCompletion());
     }
 }
 

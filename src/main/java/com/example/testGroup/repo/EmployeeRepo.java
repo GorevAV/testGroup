@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, Long> {
     List<Employee> findByDepartment(FurnitureType department);
+
 }

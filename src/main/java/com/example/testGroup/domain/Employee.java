@@ -21,7 +21,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private FurnitureType department;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<Order> orders;
 
