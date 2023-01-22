@@ -1,19 +1,17 @@
 package com.example.testGroup.service;
 
+import com.example.testGroup.domain.Department;
 import com.example.testGroup.domain.Employee;
-import com.example.testGroup.domain.FurnitureType;
 import com.example.testGroup.domain.Order;
 import com.example.testGroup.dto.OrderDTO;
+import com.example.testGroup.dto.TimeDTO;
 import com.example.testGroup.mapping.OrderMapper;
 import com.example.testGroup.repo.EmployeeRepo;
 import com.example.testGroup.repo.OrderRepo;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +37,7 @@ public class OrderService {
         return orderMapper.asDTO(orderRepo.findById(id).orElseThrow());
     }
 
+    @Transactional
     public OrderDTO insert(OrderDTO orderDTO) {
         Employee employee = employeeRepo.getReferenceById(autoAssignment(orderDTO));
         Order order = new Order();
@@ -89,7 +88,7 @@ public class OrderService {
         return orderMapper.asDTOs(orderRepo.findByStatus(false));
     }
 
-    public List<OrderDTO> getOrdersDepartment(FurnitureType department) {
+    public List<OrderDTO> getOrdersDepartment(Department department) {
         return orderMapper.asDTOs(orderRepo.findByDepartment(department));
     }
 
@@ -97,9 +96,10 @@ public class OrderService {
         return orderMapper.asDTOs(orderRepo.findByEmployee(firstName, lastName));
     }
 
-    public String getOrderTime(Long orderId) {
+    public TimeDTO getOrderTime(Long orderId) {
         Optional<Order> order = orderRepo.findById(orderId);
-        return timeComplete(order.get().getDateCompletion());
+        String time = timeComplete(order.get().getDateCompletion());
+        return new TimeDTO(time);
     }
 }
 

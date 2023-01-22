@@ -19,7 +19,7 @@ public class Employee {
     private String lastName;
 
     @Enumerated(EnumType.STRING)
-    private FurnitureType department;
+    private Department department;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -52,11 +52,11 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public FurnitureType getDepartment() {
+    public Department getDepartment() {
         return department;
     }
 
-    public void setDepartment(FurnitureType department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 

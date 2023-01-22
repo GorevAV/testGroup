@@ -2,11 +2,11 @@ package com.example.testGroup.service;
 
 import com.example.testGroup.domain.Employee;
 import com.example.testGroup.domain.Order;
-import com.example.testGroup.dto.OrderDTO;
 import com.example.testGroup.mapping.OrderMapper;
 import com.example.testGroup.repo.EmployeeRepo;
 import com.example.testGroup.repo.OrderRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -45,6 +45,7 @@ public class EmployeeService {
         employeeRepo.save(updateEmployee);
     }
 
+    @Transactional
     public void deleteEmployee(Long employeeId) {
         List<Order> orders = orderRepo.findByEmployee_Id(employeeId);
         employeeRepo.deleteById(employeeId);
