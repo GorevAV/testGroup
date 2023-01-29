@@ -23,6 +23,9 @@ public class OrderMapper {
         orderDTO.setStatus(order.isStatus());
         orderDTO.setTypeFurniture(order.getTypeFurniture());
         orderDTO.setEmployeeId(order.getEmployee().getId());
+        orderDTO.setFirstname(order.getEmployee().getFirstName());
+        orderDTO.setLastname(order.getEmployee().getLastName());
+        orderDTO.setDepartment(order.getEmployee().getDepartment());
         return orderDTO;
     }
 }

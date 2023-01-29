@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ordr")
@@ -77,5 +78,18 @@ public class Order {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return status == order.status && Objects.equals(id, order.id) && Objects.equals(name, order.name) && typeFurniture == order.typeFurniture && Objects.equals(dateCompletion, order.dateCompletion) && Objects.equals(employee, order.employee);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, typeFurniture, dateCompletion, status, employee);
     }
 }

@@ -1,7 +1,9 @@
 package com.example.testGroup.dto;
 
+import com.example.testGroup.domain.Department;
 import com.example.testGroup.domain.FurnitureType;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +17,11 @@ public class OrderDTO {
 
     private boolean status;
 
+    @JsonIgnore
     private Long employeeId;
+    private String firstname;
+    private String lastname;
+    private Department department;
 
     public String getName() {
         return name;
@@ -55,5 +61,29 @@ public class OrderDTO {
 
     public void setEmployeeId(Long employeeId) {
         this.employeeId = employeeId;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }
