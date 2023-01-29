@@ -49,9 +49,7 @@ public class EmployeeService {
     public void deleteEmployee(Long employeeId) {
         List<Order> orders = orderRepo.findByEmployee_Id(employeeId);
         employeeRepo.deleteById(employeeId);
-        for (Order order : orders){
-            orderService.updateEmployeeOrder(order.getId(), orderMapper.asDTO(order));
-        }
+        orders.forEach(order -> orderService.updateEmployeeOrder(order.getId(), orderMapper.asDTO(order)));
     }
 
 }

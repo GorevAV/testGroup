@@ -2,6 +2,7 @@ package com.example.testGroup.service;
 
 import com.example.testGroup.domain.Department;
 import com.example.testGroup.domain.Employee;
+import com.example.testGroup.domain.FurnitureType;
 import com.example.testGroup.domain.Order;
 import com.example.testGroup.dto.OrderDTO;
 import com.example.testGroup.dto.TimeDTO;
@@ -39,7 +40,7 @@ public class OrderService {
 
     @Transactional
     public OrderDTO insert(OrderDTO orderDTO) {
-        Employee employee = employeeRepo.getReferenceById(autoAssignment(orderDTO));
+        Employee employee = autoAssignment(orderDTO);
         Order order = new Order();
         order.setName(orderDTO.getName());
         order.setStatus(false);
@@ -62,7 +63,7 @@ public class OrderService {
     @Transactional
     public void updateEmployeeOrder(Long orderId, OrderDTO orderDTO) {
         Order updateOrder = orderRepo.findById(orderId).orElseThrow();
-        Employee employee = employeeRepo.getReferenceById(autoAssignment(orderDTO));
+        Employee employee = autoAssignment(orderDTO);
         updateOrder.setEmployee(employee);
         orderMapper.asDTO(orderRepo.save(updateOrder));
     }
@@ -72,16 +73,24 @@ public class OrderService {
         orderRepo.deleteById(orderId);
     }
 
-    public Long autoAssignment(OrderDTO orderDTO) {
-        List<Employee> employees = employeeRepo.findByDepartment(orderDTO.getTypeFurniture());
-        Employee employee = employees.get((int) (Math.random() * employees.size()));
-        return employee.getId();
+    public Employee autoAssignment(OrderDTO orderDTO) {
+        Employee employee = null;
+        if (orderDTO.getTypeFurniture().equals(FurnitureType.OFFICE)) {
+            employee = employeeRepo.findByDepartment(Department.OFFICE);
+        }
+        if (orderDTO.getTypeFurniture().equals(FurnitureType.STORAGE)) {
+            employee = employeeRepo.findByDepartment(Department.STORAGE);
+        }
+        if (orderDTO.getTypeFurniture().equals(FurnitureType.CUSHION)) {
+            employee = employeeRepo.findByDepartment(Department.CUSHION);
+        }
+        return employee;
     }
 
     public String timeComplete(LocalDateTime dateCompletion) {
         LocalDateTime today = LocalDateTime.now();
         return "days - " + ChronoUnit.DAYS.between(today, dateCompletion)
-                + ", hours - " + ChronoUnit.HOURS.between(today.toLocalTime(),dateCompletion.toLocalTime());
+                + ", hours - " + ChronoUnit.HOURS.between(today.toLocalTime(), dateCompletion.toLocalTime());
     }
 
     public List<OrderDTO> getOrdersNotComplete() {
