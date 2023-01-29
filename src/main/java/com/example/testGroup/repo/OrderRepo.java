@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface OrderRepo extends JpaRepository<Order, Long> {
+    @EntityGraph(attributePaths = {"employee"})
     List<Order> findByEmployee_Id(Long employeeId);
 
     List<Order> findByStatus(boolean status);
