@@ -26,7 +26,7 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployees() {
-        return employeeRepo.findAll();
+        return employeeRepo.findAllWithOrders();
     }
 
     public Employee getEmployeeById(Long employeeId) {
