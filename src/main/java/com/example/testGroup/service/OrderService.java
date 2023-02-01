@@ -2,12 +2,10 @@ package com.example.testGroup.service;
 
 import com.example.testGroup.domain.Department;
 import com.example.testGroup.domain.Employee;
-import com.example.testGroup.domain.FurnitureType;
 import com.example.testGroup.domain.Order;
 import com.example.testGroup.dto.OrderDTO;
 import com.example.testGroup.dto.TimeDTO;
 import com.example.testGroup.mapping.OrderMapper;
-import com.example.testGroup.repo.EmployeeRepo;
 import com.example.testGroup.repo.OrderRepo;
 import com.example.testGroup.util.RandomQuery;
 import org.springframework.stereotype.Service;
@@ -23,13 +21,11 @@ public class OrderService {
 
     private final OrderMapper orderMapper;
     private final OrderRepo orderRepo;
-    private final EmployeeRepo employeeRepo;
     private final RandomQuery randomQuery;
 
-    public OrderService(OrderMapper orderMapper, OrderRepo orderRepo, EmployeeRepo employeeRepo, RandomQuery randomQuery) {
+    public OrderService(OrderMapper orderMapper, OrderRepo orderRepo, RandomQuery randomQuery) {
         this.orderMapper = orderMapper;
         this.orderRepo = orderRepo;
-        this.employeeRepo = employeeRepo;
         this.randomQuery = randomQuery;
     }
 
@@ -77,17 +73,7 @@ public class OrderService {
     }
 
     public Employee autoAssignment(OrderDTO orderDTO) {
-        Employee employee = new Employee();
-        if (orderDTO.getTypeFurniture().equals(FurnitureType.OFFICE)) {
-            employee = randomQuery.randomEmployee(Department.OFFICE);
-        }
-        if (orderDTO.getTypeFurniture().equals(FurnitureType.STORAGE)) {
-            employee = randomQuery.randomEmployee(Department.STORAGE);
-        }
-        if (orderDTO.getTypeFurniture().equals(FurnitureType.CUSHION)) {
-            employee = randomQuery.randomEmployee(Department.CUSHION);
-        }
-        return employee;
+        return randomQuery.randomEmployee(orderDTO.getTypeFurniture());
     }
 
     public String timeComplete(LocalDateTime dateCompletion) {

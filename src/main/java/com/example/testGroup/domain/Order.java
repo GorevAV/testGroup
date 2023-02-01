@@ -17,7 +17,7 @@ public class Order {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private FurnitureType typeFurniture;
+    private Department typeFurniture;
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime dateCompletion;
@@ -48,11 +48,11 @@ public class Order {
         this.name = name;
     }
 
-    public FurnitureType getTypeFurniture() {
+    public Department getTypeFurniture() {
         return typeFurniture;
     }
 
-    public void setTypeFurniture(FurnitureType typeFurniture) {
+    public void setTypeFurniture(Department typeFurniture) {
         this.typeFurniture = typeFurniture;
     }
 

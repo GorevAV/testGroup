@@ -15,7 +15,8 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     @EntityGraph(attributePaths = {"employee"})
     List<Order> findByEmployee_Id(Long employeeId);
 
-    List<Order> findByStatus(boolean status);
+    @Query("select o from Employee e join e.orders o where o.status = :status")
+    List<Order> findByStatus(@Param("status") boolean status);
 
     @Query("select o from Employee e join e.orders o where e.department = :department")
     List<Order> findByDepartment(@Param("department") Department department);

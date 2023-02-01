@@ -1,7 +1,6 @@
 package com.example.testGroup.dto;
 
 import com.example.testGroup.domain.Department;
-import com.example.testGroup.domain.FurnitureType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,7 +9,7 @@ import java.time.LocalDateTime;
 public class OrderDTO {
     private String name;
 
-    private FurnitureType typeFurniture;
+    private Department typeFurniture;
 
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     private LocalDateTime dateCompletion;
@@ -31,11 +30,11 @@ public class OrderDTO {
         this.name = name;
     }
 
-    public FurnitureType getTypeFurniture() {
+    public Department getTypeFurniture() {
         return typeFurniture;
     }
 
-    public void setTypeFurniture(FurnitureType typeFurniture) {
+    public void setTypeFurniture(Department typeFurniture) {
         this.typeFurniture = typeFurniture;
     }
 
