@@ -14,7 +14,5 @@ import java.util.List;
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, Long> {
 
-    @Query("SELECT e from Employee e join fetch e.orders")
-    List<Employee> findAllWithOrders();
 
 }

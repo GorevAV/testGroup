@@ -85,11 +85,11 @@ public class Order {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
-        return status == order.status && Objects.equals(id, order.id) && Objects.equals(name, order.name) && typeFurniture == order.typeFurniture && Objects.equals(dateCompletion, order.dateCompletion) && Objects.equals(employee, order.employee);
+        return Objects.equals(id, order.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, typeFurniture, dateCompletion, status, employee);
+        return Objects.hash(id);
     }
 }
